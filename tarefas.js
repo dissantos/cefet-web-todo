@@ -39,3 +39,19 @@ includeTaskButton.addEventListener('click', () => {
   newTaskNameInput.value = '';
   newTaskNameInput.focus();
 })
+
+//Opcional 3
+let filterInput = document.querySelector('#filtro-de-categoria');
+let listItemsEl = document.querySelectorAll('.item-tarefa');
+
+filterInput.addEventListener('change', () => {
+  let categorySelected = 'categoria-' + filterInput.value;
+
+  listItemsEl.forEach( (item) => {
+    item.classList.remove('retido-no-filtro');
+    if( !item.classList.contains(categorySelected) && filterInput.value) {
+      item.classList.add('retido-no-filtro');
+    }
+  })
+
+})
