@@ -7,8 +7,9 @@ class Tarefa {
   }
 
   addTaskPage(containerEl){
+    let key = containerEl.childElementCount;
     containerEl.innerHTML += `
-      <li class="item-tarefa ${this.realizada? 'marcado': ''} categoria-${this.categoria}">
+      <li key=${key} class="item-tarefa ${this.realizada? 'marcado': ''} categoria-${this.categoria}">
         ${this.nome}
       </li>
     `;
@@ -32,19 +33,23 @@ let includeTaskButton = document.querySelector('#incluir-nova-tarefa');
 let newTaskNameInput = document.querySelector('#nova-tarefa-nome');
 let newTaskCategoryInput = document.querySelector('#nova-tarefa-categoria');
 
-includeTaskButton.addEventListener('click', () => {
+function addTaskTodoList() {
   let newTask = new Tarefa(newTaskNameInput.value, newTaskCategoryInput.value, false);
   tarefas.push(newTask);
   newTask.addTaskPage(listEl);
   newTaskNameInput.value = '';
   newTaskNameInput.focus();
+}
+
+includeTaskButton.addEventListener('click', () => {
+  addTaskTodoList();
 })
 
 //Opcional 3
 let filterInput = document.querySelector('#filtro-de-categoria');
-let listItemsEl = document.querySelectorAll('.item-tarefa');
 
 filterInput.addEventListener('change', () => {
+  let listItemsEl = document.querySelectorAll('.item-tarefa');
   let categorySelected = 'categoria-' + filterInput.value;
 
   listItemsEl.forEach( (item) => {
@@ -53,5 +58,21 @@ filterInput.addEventListener('change', () => {
       item.classList.add('retido-no-filtro');
     }
   })
+
+})
+
+//Opcional 4
+newTaskNameInput.addEventListener('keyup', (e) => {
+  if( e.key === 'Enter' ) {
+    addTaskTodoList();
+  }
+})
+
+//Opcional 5
+listEl.addEventListener('click', (e) => {
+  e.target.classList.toggle('marcado');
+
+  let id = e.target.attributes.key.value
+  tarefas[id].realizada = !tarefas[id].realizada;
 
 })
